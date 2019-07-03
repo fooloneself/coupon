@@ -1,20 +1,23 @@
 <?php
+$env=constant('YII_ENV');
 
-$params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
-
+$params = require __DIR__ .DIRECTORY_SEPARATOR.$env.DIRECTORY_SEPARATOR. 'params.php';
+$db = require __DIR__ .DIRECTORY_SEPARATOR.$env.DIRECTORY_SEPARATOR . 'db.php';
+$basePath=dirname(__DIR__);
 $config = [
     'id' => 'basic',
-    'basePath' => dirname(__DIR__),
+    'basePath' => $basePath,
     'bootstrap' => ['log'],
     'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
+            'class'=>'common\components\Request',
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ZxQ4v3u3O1cnPEJBLK8EwtZ9FtDB8AvE',
+        ],
+        'response'=>[
+            'class'=>'common\components\Response'
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -24,14 +27,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
-        ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'class'=>'common\components\ErrorHandler',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
