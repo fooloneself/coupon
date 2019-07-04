@@ -2,103 +2,93 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use yii\web\IdentityInterface;
+
+/**
+ * This is the model class for table "user".
+ *
+ * @property int $id
+ * @property string $openid 微信openid
+ * @property string $session_key 会话令牌
+ * @property string $session_token 会话令牌
+ * @property string $mch_id 商户id
+ * @property int $type 账号类型：1消费者账户 2商户账户
+ * @property int $token_expire_time 会话令牌过期时间
+ * @property int $create_time 创建时间
+ */
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'user';
     }
 
     /**
      * {@inheritdoc}
      */
+    public function rules()
+    {
+        return [
+            [['openid'], 'required'],
+            [['type', 'token_expire_time', 'create_time'], 'integer'],
+            [['openid', 'session_key', 'session_token', 'mch_id'], 'string', 'max' => 100],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'openid' => 'Openid',
+            'session_key' => 'Session Key',
+            'session_token' => 'Session Token',
+            'mch_id' => 'Mch ID',
+            'type' => 'Type',
+            'token_expire_time' => 'Token Expire Time',
+            'create_time' => 'Create Time',
+        ];
+    }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return self::find()->where(['session_token'=>$token])->one();
     }
 
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
+    public static function findIdentity($id)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return self::find()->where(['id'=>$id])->one();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAuthKey()
     {
-        return $this->authKey;
+        return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return true;
     }
 
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
+    public function hasRegisterMerchant()
     {
-        return $this->password === $password;
+        $mchId=$this->mch_id;
+        return $mchId>0;
+    }
+
+    public function getMerchantId()
+    {
+        return intval($this->mch_id);
     }
 }

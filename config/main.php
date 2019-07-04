@@ -39,14 +39,16 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+    ],
+    'modules' => [
+        'user' =>  'app\modules\user\Module',
+        'merchant' =>'app\modules\merchant\Module',
     ],
     'params' => $params,
 ];

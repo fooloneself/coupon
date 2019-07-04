@@ -1,0 +1,6 @@
+RewriteEngine on
+#如果不是文件、不是目录
+RewriteCond %{REQUEST_FILENAME} !-f [NC]
+RewriteCond %{REQUEST_FILENAME} !-d [NC]
+#执行RewriteRule规则体
+RewriteRule . index.php [L]

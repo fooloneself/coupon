@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'wxSmallProject'=>[
+        'app_id'=>'',
+        'app_secret'=>'',
+    ]
 ];

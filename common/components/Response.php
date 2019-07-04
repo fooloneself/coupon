@@ -11,7 +11,7 @@ class Response extends \yii\web\Response {
     public $format=self::FORMAT_JSON;
 
 
-    public function error(int $code,string $errMsg):Response{
+    public function error(int $code,string $errMsg=''):Response{
         $this->setData($code,$errMsg);
         return $this;
     }
@@ -24,6 +24,7 @@ class Response extends \yii\web\Response {
 
 
     private function setData(int $code,string $errMsg,$data=null){
+        $this->format=self::FORMAT_JSON;
         $this->data=[
             'code'=>$code,
             'errMsg'=>$errMsg,

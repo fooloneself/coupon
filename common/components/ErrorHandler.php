@@ -11,7 +11,11 @@ class ErrorHandler extends \yii\base\ErrorHandler {
 
     protected function renderException($exception)
     {
-        \Yii::$app->response->error(1,$exception->getMessage())->send();
+        if(YII_DEBUG){
+            throw $exception;
+        }else{
+            \Yii::$app->response->error(1,$exception->getMessage())->send();
+        }
     }
 
 }
