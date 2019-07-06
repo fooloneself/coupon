@@ -19,9 +19,11 @@ CREATE TABLE `coupon` (
   `user_id` int(11) DEFAULT NULL COMMENT '发布券的账户id',
   `total_num` int(11) DEFAULT NULL COMMENT '发放总量',
   `race_num` int(11) DEFAULT '0' COMMENT '已抢占数量',
-  `uper_limit_per_person` int(11) DEFAULT '1' COMMENT '每人可领取的数量上限',
+  `upper_limit_per_person` int(11) DEFAULT '1' COMMENT '每人可领取的数量上限',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
   `type` tinyint(1) DEFAULT NULL COMMENT '优惠券类型：1代金券 2折扣券 3兑换券 4团购券 5特价券',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态:1待审核 2拒绝 3待投放 4已投放 5已下架',
+  `start_date` date DEFAULT NULL COMMENT '券可用起始日期',
   `end_date` date DEFAULT NULL COMMENT '券可用截止日期',
   `title` varchar(100) DEFAULT NULL COMMENT '卡券名称',
   `sub_title` varchar(100) DEFAULT NULL COMMENT '卡券副标题',
@@ -40,6 +42,7 @@ CREATE TABLE `coupon` (
 CREATE TABLE `coupon_item` (
   `code` varchar(100) NOT NULL COMMENT '券码',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态：1未使用 2已核销',
+  `discount_amount` decimal(10,2) DEFAULT '0.00' COMMENT '优惠金额（元）',
   `coupon_id` int(11) DEFAULT NULL COMMENT '券id',
   `own_user_id` int(11) DEFAULT NULL COMMENT '拥有用户id',
   `own_time` int(11) DEFAULT NULL COMMENT '抢占时间',
@@ -65,6 +68,7 @@ CREATE TABLE `merchant` (
   `register_time` int(11) DEFAULT NULL COMMENT '注册时间',
   `coupon_currency` int(11) DEFAULT '0' COMMENT '券币',
   `is_recommend` tinyint(1) DEFAULT '0' COMMENT '是否推荐：0否 1是',
+  `type` tinyint(1) DEFAULT NULL COMMENT '商户类型',
   `address` text COMMENT '商户地址',
   `introduce` text COMMENT '商户介绍',
   PRIMARY KEY (`id`)
