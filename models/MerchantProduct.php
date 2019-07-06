@@ -55,4 +55,21 @@ class MerchantProduct extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+
+    /**
+     * 获取商家的产品列表
+     * @param int $mchId
+     * @param int $page
+     * @param int $pageSize
+     * @return array
+     */
+    public static function getProductListOfMch(int $mchId,int $page,int $pageSize):array{
+        return self::find()
+            ->where([
+                'mch_id'=>$mchId,
+            ])
+            ->limit($pageSize)
+            ->offset(($page-1)*$pageSize)
+            ->asArray()->all();
+    }
 }

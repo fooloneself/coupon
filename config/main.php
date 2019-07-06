@@ -9,6 +9,7 @@ $config = [
     'basePath' => $basePath,
     'bootstrap' => ['log'],
     'aliases' => [
+        'service'=>$basePath.DIRECTORY_SEPARATOR.'service',
     ],
     'components' => [
         'request' => [

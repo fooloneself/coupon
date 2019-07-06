@@ -19,4 +19,18 @@ class SiteController extends Controller
         return \Yii::$app->response->success(Merchant::getRecommendList($page,$pageSize));
     }
 
+    /**
+     * 登录
+     */
+    public function actionLogin(){
+
+    }
+
+    /**
+     * 退出登录
+     */
+    public function actionLogout(){
+
+    }
+
 }

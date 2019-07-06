@@ -21,6 +21,7 @@ use Yii;
  * @property int $register_time 注册时间
  * @property int $coupon_currency 券币
  * @property int $is_recommend 是否推荐：0否 1是
+ * @property int $type 商户类型
  * @property string $address 商户地址
  * @property string $introduce 商户介绍
  */
@@ -40,7 +41,7 @@ class Merchant extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'register_time', 'coupon_currency', 'is_recommend'], 'integer'],
+            [['user_id', 'register_time', 'coupon_currency', 'is_recommend', 'type'], 'integer'],
             [['serial_number'], 'required'],
             [['longitude', 'latitude'], 'number'],
             [['register_date', 'not_limit_end_date'], 'safe'],
@@ -70,26 +71,29 @@ class Merchant extends \yii\db\ActiveRecord
             'register_time' => 'Register Time',
             'coupon_currency' => 'Coupon Currency',
             'is_recommend' => 'Is Recommend',
+            'type' => 'Type',
             'address' => 'Address',
             'introduce' => 'Introduce',
         ];
     }
 
     /**
-     * 获取推荐列表
-     * @param int $page
-     * @param int $pageSize
-     * @return array|
+     * 获取商家的基本信息
+     * @param int $mchId
+     * @return array
      */
-    public static function getRecommendList(int $page,int $pageSize){
-        return self::find()->alias('m')
-            ->select('m.id,m.name,')
-            ->leftJoin([MerchantProduct::tableName(),'mp'],'m.id=mp.mch_id')
-            ->leftJoin([Coupon::tableName(),'c'],'c.mch_id=m.id')
-            ->groupBy('m.id')
-            ->offset(($page-1)*$pageSize)
-            ->limit($pageSize)
-            ->orderBy('m.is_recommend desc,')
-            ->asArray()->all();
+    public static function getBaseInfo(int $mchId):array{
+        return self::find()
+            ->where(['id'=>$mchId])
+            ->asArray()->one();
+    }
+
+    /**
+     * 生成商户编号
+     * @param int $time
+     * @return string
+     */
+    public static function generateSerialNo(int $time):string{
+        return str_pad(dechex($time*100+rand(10,99)),10,'0',STR_PAD_LEFT);
     }
 }
