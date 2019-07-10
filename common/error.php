@@ -10,3 +10,7 @@ define('ERROR_NOT_REGISTER_MERCHANT',3);
 define('ERROR_PARAM_WRONG',4);
 //数据库保存失败
 define('ERROR_DATABASE_SAVE_FAIL',5);
+//未找打商品
+define('ERROR_PRODUCT_NOT_FOUND',6);
+//数据库删除失败
+define('ERROR_DATABASE_DELETE_FAIL',7);

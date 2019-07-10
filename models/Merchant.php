@@ -41,7 +41,7 @@ class Merchant extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'register_time', 'coupon_currency', 'is_recommend', 'type'], 'integer'],
+            [['user_id', 'register_time', 'is_recommend', 'type'], 'integer'],
             [['serial_number'], 'required'],
             [['longitude', 'latitude'], 'number'],
             [['register_date', 'not_limit_end_date'], 'safe'],
@@ -69,7 +69,6 @@ class Merchant extends \yii\db\ActiveRecord
             'register_date' => 'Register Date',
             'not_limit_end_date' => 'Not Limit End Date',
             'register_time' => 'Register Time',
-            'coupon_currency' => 'Coupon Currency',
             'is_recommend' => 'Is Recommend',
             'type' => 'Type',
             'address' => 'Address',

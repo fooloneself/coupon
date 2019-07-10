@@ -72,4 +72,13 @@ class MerchantProduct extends \yii\db\ActiveRecord
             ->offset(($page-1)*$pageSize)
             ->asArray()->all();
     }
+
+    /**
+     * 产品编码
+     * @return string
+     */
+    public static function productCode():string{
+        $time=time()-strtotime('2000-01-01 00:00:00');
+        return str_pad(dechex(time),9,'0',STR_PAD_LEFT);
+    }
 }

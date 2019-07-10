@@ -33,7 +33,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['openid'], 'required'],
-            [['type', 'token_expire_time', 'create_time'], 'integer'],
+            [['type', 'coupon_currency', 'token_expire_time', 'create_time'], 'integer'],
             [['openid', 'session_key', 'session_token', 'mch_id'], 'string', 'max' => 100],
         ];
     }
@@ -50,6 +50,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'session_token' => 'Session Token',
             'mch_id' => 'Mch ID',
             'type' => 'Type',
+            'coupon_currency' => 'Coupon Currency',
             'token_expire_time' => 'Token Expire Time',
             'create_time' => 'Create Time',
         ];
