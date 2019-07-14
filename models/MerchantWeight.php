@@ -76,9 +76,9 @@ class MerchantWeight extends \yii\db\ActiveRecord
                 'can_receive_num'=>'c.can_receive_num',
                 'products'=>"group_concat(concat(mp.id,',',mp.name,',',mp.price,',',mp.cover_img) separator ';')",
             ])
-            ->leftJoin([Merchant::tableName(),'m'],'m.id=mw.mch_id')
-            ->leftJoin([MerchantProduct::tableName(),'mp'],'mw.mch_id=mp.mch_id')
-            ->leftJoin([Coupon::tableName(),'c'],'c.id=mw.coupon_id')
+            ->leftJoin(['m'=>Merchant::tableName()],'m.id=mw.mch_id')
+            ->leftJoin(['mp'=>MerchantProduct::tableName()],'mw.mch_id=mp.mch_id')
+            ->leftJoin(['c'=>Coupon::tableName()],'c.id=mw.coupon_id')
             ->groupBy('mw.mch_id')
             ->orderBy('mw.weight desc')
             ->limit($pageSize)

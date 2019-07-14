@@ -79,6 +79,6 @@ class MerchantProduct extends \yii\db\ActiveRecord
      */
     public static function productCode():string{
         $time=time()-strtotime('2000-01-01 00:00:00');
-        return str_pad(dechex(time),9,'0',STR_PAD_LEFT);
+        return str_pad(dechex($time),9,'0',STR_PAD_LEFT);
     }
 }

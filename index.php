@@ -16,4 +16,4 @@ require __DIR__ . '/common/error.php';
 $config = require __DIR__ . '/config/main.php';
 Yii::setAlias('@common',__DIR__.DIRECTORY_SEPARATOR.'common');
 
-(new yii\web\Application($config))->run();
+(new \common\Application($config))->run();

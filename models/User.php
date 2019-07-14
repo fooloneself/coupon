@@ -16,7 +16,7 @@ use yii\web\IdentityInterface;
  * @property int $token_expire_time 会话令牌过期时间
  * @property int $create_time 创建时间
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['openid'], 'required'],
-            [['type', 'coupon_currency', 'token_expire_time', 'create_time'], 'integer'],
+            [['type', 'token_expire_time', 'create_time'], 'integer'],
             [['openid', 'session_key', 'session_token', 'mch_id'], 'string', 'max' => 100],
         ];
     }
@@ -50,22 +50,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'session_token' => 'Session Token',
             'mch_id' => 'Mch ID',
             'type' => 'Type',
-            'coupon_currency' => 'Coupon Currency',
             'token_expire_time' => 'Token Expire Time',
             'create_time' => 'Create Time',
         ];
     }
 
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return self::find()->where(['session_token'=>$token])->one();
-    }
-
     public static function findIdentity($id)
     {
-        return self::find()->where(['id'=>$id])->one();
+        return self::findOne(['id'=>$id]);
     }
 
+    public static function findIdentityByOpenId($openId){
+        return self::findOne(['openid'=>$openId]);
+    }
+
+    public static function generateSessionToken(string $unionId){
+        return md5(uniqid().$unionId);
+    }
 
     public function getId()
     {
@@ -74,12 +75,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getAuthKey()
     {
-        return '';
-    }
-
-    public function validateAuthKey($authKey)
-    {
-        return true;
+        return $this->session_token;
     }
 
     public function hasRegisterMerchant()

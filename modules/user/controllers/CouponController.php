@@ -3,7 +3,7 @@
 namespace app\modules\user\controllers;
 
 use app\models\CouponItem;
-use yii\web\Controller;
+use yii\base\Controller;
 
 /**
  * Default controller for the `user` module

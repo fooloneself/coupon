@@ -61,4 +61,21 @@ class DefaultController extends Controller
             return \Yii::$app->response->success($creator->getAttributes());
         }
     }
+
+    public function actionGrant(){
+        $mchId=\Yii::$app->user->getIdentity()->getMerchantId();
+        $id=\Yii::$app->request->post('couponId');
+        $coupon=Coupon::findOne(['mch_id'=>$mchId,'id'=>$id]);
+        if(empty($coupon)){
+            return \Yii::$app->response->error(ERROR_COUPON_NOT_FOUND);
+        }
+        if(!$coupon->canGrant()){
+            return \Yii::$app->response->error(ERROR_COUPON_CANNOT_GRANT);
+        }else if($coupon->isOverdue()){
+            return \Yii::$app->response->error(ERROR_COUPON_OVERDUE);
+        }
+        if($coupon->grant()){
+
+        }
+    }
 }

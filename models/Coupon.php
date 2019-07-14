@@ -185,4 +185,26 @@ class Coupon extends \yii\db\ActiveRecord
             ->offset(($page-1)*$pageSize)
             ->asArray()->all();
     }
+
+    public function canGrant():bool {
+        if($this->status==self::STATUS_THROWING){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function isOverdue():bool {
+        $endTime=strtotime($this->end_date)+86400;
+        if(time()>=$endTime){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function grant():bool {
+        $this->status=self::STATUS_THROWN;
+        return $this->save();
+    }
 }

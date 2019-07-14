@@ -49,7 +49,10 @@ class SiteController extends Controller
      * 登录
      */
     public function actionLogin(){
-
+        $code=\Yii::$app->request->post('code');
+        var_dump($code);die;
+        $res=\Yii::$app->user->wxCodeToSession($code);
+        return \Yii::$app->response->success($res);
     }
 
     /**

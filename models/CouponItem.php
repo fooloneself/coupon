@@ -75,8 +75,8 @@ class CouponItem extends \yii\db\ActiveRecord
     public static function getList(int $userId,int $status,int $orderBy,int $page,int $pageSize):array{
         $query=self::find()->alias('ci')
             ->select('c.mch_id,m.name as mch_name,c.type as coupon_type,c.discount,c.shop_price,c.end_date,c.title,c.sub_title,ci.code')
-            ->leftJoin([Coupon::tableName(),'c'],'ci.coupon_id=c.id')
-            ->leftJoin([Merchant::tableName(),'m'],'c.mch_id=m.id')
+            ->leftJoin(['c'=>Coupon::tableName()],'ci.coupon_id=c.id')
+            ->leftJoin(['m'=>Merchant::tableName()],'c.mch_id=m.id')
             ->where([
                 'ci.own_user_id'=>$userId,
             ]);
@@ -111,7 +111,7 @@ class CouponItem extends \yii\db\ActiveRecord
      */
     public static function getUsableCouponCountOfUser(int $userId):int{
         $count=self::find()->alias('ci')
-            ->leftJoin([Coupon::tableName(),'c'],'c.id=ci.coupon_id')
+            ->leftJoin(['c'=>Coupon::tableName()],'c.id=ci.coupon_id')
             ->where([
                 'ci.own_user_id'=>$userId,
                 'ci.status'=>self::STATUS_NOT_USE,
@@ -129,7 +129,7 @@ class CouponItem extends \yii\db\ActiveRecord
         $count=self::find()
             ->where([
                 'own_user_id'=>$userId,
-                'ci.status'=>self::STATUS_HAS_USE,
+                'status'=>self::STATUS_HAS_USE,
             ])->count();
         return intval($count);
     }

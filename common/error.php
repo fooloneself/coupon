@@ -14,3 +14,11 @@ define('ERROR_DATABASE_SAVE_FAIL',5);
 define('ERROR_PRODUCT_NOT_FOUND',6);
 //数据库删除失败
 define('ERROR_DATABASE_DELETE_FAIL',7);
+//未找到券
+define('ERROR_COUPON_NOT_FOUND',8);
+//券已失效
+define('ERROR_COUPON_OVERDUE',9);
+//此券不能投放
+define('ERROR_COUPON_CANNOT_GRANT',10);
+//券币不足
+define('ERROR_COUPON_CURRENCY_NOT_ENOUGH',11);

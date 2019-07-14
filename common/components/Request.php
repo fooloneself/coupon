@@ -1,5 +1,7 @@
 <?php
 namespace common\components;
+use yii\web\JsonParser;
+
 /**
  * Created by PhpStorm.
  * User: Administrator
@@ -9,18 +11,22 @@ namespace common\components;
 class Request extends \yii\web\Request {
 
 
-    const HEADER_OPEN_ID        ='open_id';
+    const HEADER_IDENTITY_ID       ='identity-id';
 
-    const HEADER_SESSION_TOKEN  ='session_token';
+    const HEADER_SESSION_TOKEN  ='session-token';
 
     const HEADER_SIGNATURE      ='signature';
+
+    public $parsers=[
+        'application/json'=>JsonParser::class
+    ];
 
     /**
      * 获取openid
      * @return string
      */
-    public function getOpenId():string{
-        return $this->getHeaders()->get(self::HEADER_OPEN_ID,'');
+    public function getIdentityId():string{
+        return $this->getHeaders()->get(self::HEADER_IDENTITY_ID,'');
     }
 
     /**

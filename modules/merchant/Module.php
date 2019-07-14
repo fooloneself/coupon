@@ -12,21 +12,14 @@ class Module extends \yii\base\Module
      */
     public $controllerNamespace = 'app\modules\merchant\controllers';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        parent::init();
-
-    }
 
     public function beforeAction($action)
     {
-        if(\Yii::$app->user->getIsGuest()){
+        \Yii::$app->user->renewIdentity(\Yii::$app->request->getIdentityId());
+        if(\Yii::$app->user->isLogin(\Yii::$app->request->getToken()) ){
             \Yii::$app->response->error(ERROR_NOT_LOGIN);
             return false;
-        }else if(!\Yii::$app->user->getIdentity(true)->hasRegisterMerchant()){
+        }else if(!\Yii::$app->user->getIdentity()->hasRegisterMerchant()){
             \Yii::$app->response->error(ERROR_NOT_REGISTER_MERCHANT);
             return false;
         }
