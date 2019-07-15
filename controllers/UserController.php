@@ -6,7 +6,7 @@ use app\models\Merchant;
 use app\models\MerchantWeight;
 use yii\base\Controller;
 
-class SiteController extends Controller
+class UserController extends Controller
 {
 
 
@@ -50,7 +50,6 @@ class SiteController extends Controller
      */
     public function actionLogin(){
         $code=\Yii::$app->request->post('code');
-        var_dump($code);die;
         $res=\Yii::$app->user->wxCodeToSession($code);
         return \Yii::$app->response->success($res);
     }
@@ -59,7 +58,8 @@ class SiteController extends Controller
      * 退出登录
      */
     public function actionLogout(){
-
+        \Yii::$app->user->logout();
+        return \Yii::$app->response->success();
     }
 
 }

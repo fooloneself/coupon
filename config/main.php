@@ -44,8 +44,8 @@ $config = [
         ],
     ],
     'modules' => [
-        'user' =>  'app\modules\user\Module',
-        'merchant' =>'app\modules\merchant\Module',
+        'user-client' =>  'app\modules\user\Module',
+        'merchant-client' =>'app\modules\merchant\Module',
     ],
     'params' => $params,
 ];

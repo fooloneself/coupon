@@ -186,6 +186,10 @@ class Coupon extends \yii\db\ActiveRecord
             ->asArray()->all();
     }
 
+    /**
+     * 判断状态是否可投放
+     * @return bool
+     */
     public function canGrant():bool {
         if($this->status==self::STATUS_THROWING){
             return true;
@@ -194,6 +198,10 @@ class Coupon extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * 券是否失效
+     * @return bool
+     */
     public function isOverdue():bool {
         $endTime=strtotime($this->end_date)+86400;
         if(time()>=$endTime){
@@ -203,8 +211,64 @@ class Coupon extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * 修改券的状态为已发放
+     * @return bool
+     */
     public function grant():bool {
         $this->status=self::STATUS_THROWN;
         return $this->save();
+    }
+
+    /**
+     * 计算券消耗的券币
+     * @return int
+     */
+    public function calculateCouponCurrency():int{
+        return $this->total_num;
+    }
+
+    /**
+     * 是否可领取
+     * @return bool
+     */
+    public function canReceive(){
+        return $this->status==self::STATUS_THROWN;
+    }
+
+    /**
+     * 生成券码
+     * @return string
+     */
+    public function generateCouponCode():string{
+        return md5(str_pad($this->mch_id,8,'0',STR_PAD_LEFT).str_pad($this->id,10,'0',STR_PAD_LEFT).uniqid());
+    }
+
+    /**
+     *
+     * @param int $num
+     * @return bool
+     */
+    public function addRaceNum(int $num=1):bool {
+        $this->race_num+=$num;
+        return $this->update();
+    }
+
+    /**
+     * 用户已领取数量
+     * @param int $userId
+     * @return int
+     */
+    public function hasReceivedNum(int $userId):int{
+        return CouponItem::find()->where(['coupon_id'=>$this->id,'own_user_id'=>$userId])->count();
+    }
+
+    /**
+     * 是否还有足额的剩余
+     * @param int $num
+     * @return bool
+     */
+    public function hasSurplus(int $num=1):bool {
+        return ($this->total_num-$this->race_num)>=$num;
     }
 }

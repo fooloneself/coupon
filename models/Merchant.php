@@ -97,5 +97,17 @@ class Merchant extends \yii\db\ActiveRecord
         return str_pad(dechex($time*100+rand(10,99)),10,'0',STR_PAD_LEFT);
     }
 
+    /**
+     * 获取券
+     * @param int $couponId
+     * @return Coupon|null
+     */
+    public function getCouponById(int $couponId):?Coupon{
+        return Coupon::findOne(['mch_id'=>$this->id,'id'=>$couponId]);
+    }
 
+    public function deductCurrency(int $currency):bool {
+        $this->coupon_currency=$this->coupon_currency-$currency;
+        return $this->update();
+    }
 }

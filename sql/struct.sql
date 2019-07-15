@@ -74,19 +74,6 @@ CREATE TABLE `merchant` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户信息表';
 
-/*Table structure for table `merchant_coupon_currency_record` */
-
-CREATE TABLE `merchant_coupon_currency_record` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '记录ID',
-  `serial_number` varchar(100) DEFAULT NULL COMMENT '流水号',
-  `mch_id` int(11) NOT NULL COMMENT '商户id',
-  `type` tinyint(1) NOT NULL COMMENT '1进账 2出账',
-  `amount` int(11) DEFAULT '0' COMMENT '金额：<0 出账 >0进账',
-  `happen_time` int(11) DEFAULT NULL COMMENT '发生时间',
-  `mark` text COMMENT '资金流向备注',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户券币流动记录表';
-
 /*Table structure for table `merchant_product` */
 
 CREATE TABLE `merchant_product` (
@@ -101,19 +88,62 @@ CREATE TABLE `merchant_product` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户产品表';
 
+/*Table structure for table `merchant_weight` */
+
+CREATE TABLE `merchant_weight` (
+  `mch_id` int(11) NOT NULL COMMENT '商户ID',
+  `weight` int(11) DEFAULT '0' COMMENT '权重',
+  `coupon_id` int(11) DEFAULT '0' COMMENT '券ID',
+  `can_receive_num` int(11) DEFAULT '0' COMMENT '可领取的数量',
+  `has_received_num` int(11) DEFAULT '0' COMMENT '已领取的数量',
+  PRIMARY KEY (`mch_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*Table structure for table `user` */
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `openid` varchar(100) NOT NULL COMMENT '微信openid',
+  `appid` varchar(100) DEFAULT NULL COMMENT '应用id',
+  `unionid` varchar(100) DEFAULT NULL COMMENT '用户在开放平台的唯一标识符',
   `session_key` varchar(100) DEFAULT NULL COMMENT '会话令牌',
   `session_token` varchar(100) DEFAULT NULL COMMENT '会话令牌',
   `mch_id` varchar(100) DEFAULT '0' COMMENT '商户id',
+  `nick_name` varchar(100) DEFAULT NULL COMMENT '昵称',
+  `avatar` varchar(200) DEFAULT NULL COMMENT '头像',
   `type` tinyint(1) DEFAULT '1' COMMENT '账号类型：1消费者账户 2商户账户',
   `token_expire_time` int(11) DEFAULT NULL COMMENT '会话令牌过期时间',
   `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQUE_OPENID` (`openid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='账号信息表';
+
+/*Table structure for table `user_coupon_currency_recharge` */
+
+CREATE TABLE `user_coupon_currency_recharge` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `order_no` varchar(100) DEFAULT NULL COMMENT '订单编号',
+  `money` decimal(10,2) DEFAULT NULL COMMENT '金额',
+  `coupon_currency` int(11) DEFAULT '0' COMMENT '券币',
+  `pay_channel` tinyint(1) DEFAULT '0' COMMENT '支付渠道：1微信 2支付宝',
+  `status` tinyint(1) DEFAULT '0' COMMENT '状态',
+  `create_time` int(11) DEFAULT NULL COMMENT '下单时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账号信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `user_coupon_currency_turnover` */
+
+CREATE TABLE `user_coupon_currency_turnover` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '记录ID',
+  `serial_number` varchar(100) DEFAULT NULL COMMENT '流水号',
+  `mch_id` int(11) NOT NULL COMMENT '商户id',
+  `type` tinyint(1) NOT NULL COMMENT '1进账 2出账',
+  `amount` int(11) DEFAULT '0' COMMENT '金额：<0 出账 >0进账',
+  `happen_time` int(11) DEFAULT NULL COMMENT '发生时间',
+  `mark` text COMMENT '资金流向备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户券币流动记录表';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

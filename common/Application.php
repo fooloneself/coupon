@@ -105,6 +105,31 @@ class Application extends \yii\base\Application
             throw new NotFoundHttpException(\Yii::t('yii', 'Page not found.'), $e->getCode(), $e);
         }
     }
+    private $_homeUrl;
+
+    /**
+     * @return string the homepage URL
+     */
+    public function getHomeUrl()
+    {
+        if ($this->_homeUrl === null) {
+            if ($this->getUrlManager()->showScriptName) {
+                return $this->getRequest()->getScriptUrl();
+            }
+
+            return $this->getRequest()->getBaseUrl() . '/';
+        }
+
+        return $this->_homeUrl;
+    }
+
+    /**
+     * @param string $value the homepage URL
+     */
+    public function setHomeUrl($value)
+    {
+        $this->_homeUrl = $value;
+    }
 
     /**
      * Returns the error handler component.

@@ -4,12 +4,13 @@ namespace app\modules\merchant\controllers;
 
 use app\models\Coupon;
 use service\coupon\creator\Creator;
+use service\coupon\Granter;
 use yii\base\Controller;
 
 /**
  * Default controller for the `merchant` module
  */
-class DefaultController extends Controller
+class CouponController extends Controller
 {
 
     /**
@@ -62,20 +63,21 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * 发放券
+     * @return \common\components\Response
+     */
     public function actionGrant(){
-        $mchId=\Yii::$app->user->getIdentity()->getMerchantId();
         $id=\Yii::$app->request->post('couponId');
-        $coupon=Coupon::findOne(['mch_id'=>$mchId,'id'=>$id]);
-        if(empty($coupon)){
-            return \Yii::$app->response->error(ERROR_COUPON_NOT_FOUND);
+        $merchant=\Yii::$app->user->getIdentity()->getMerchant();
+        if(empty($merchant)){
+            return \Yii::$app->response->error(ERROR_MERCHANT_NOT_FOUND);
         }
-        if(!$coupon->canGrant()){
-            return \Yii::$app->response->error(ERROR_COUPON_CANNOT_GRANT);
-        }else if($coupon->isOverdue()){
-            return \Yii::$app->response->error(ERROR_COUPON_OVERDUE);
-        }
-        if($coupon->grant()){
-
+        $granter=new Granter($merchant);
+        if($granter->grant($id)){
+            return \Yii::$app->response->success();
+        }else{
+            return \Yii::$app->response->error($granter::getError());
         }
     }
 }

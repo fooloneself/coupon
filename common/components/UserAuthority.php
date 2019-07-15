@@ -9,6 +9,7 @@
 namespace common\components;
 
 
+use app\models\Merchant;
 use app\models\User;
 use yii\base\Component;
 
@@ -71,6 +72,15 @@ class UserAuthority extends Component
     }
 
     /**
+     * 退出登录
+     */
+    public function logout(){
+        $this->_identity->session_token='';
+        $this->_identity->update();
+        $this->_identity=null;
+    }
+
+    /**
      *
      * @param $code
      * @return mixed
@@ -83,10 +93,14 @@ class UserAuthority extends Component
             'js_code'=>$code,
             'grant_type'=>'authorization_code'
         ]);
-        $ch=curl_init($wx['code2Session'].'?'.$paramStr);
+        $url=$wx['code2Session'].'?'.$paramStr;
+        $ch=curl_init($url);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_HEADER,0);
         $res=curl_exec($ch);
         curl_close($ch);
         return $res;
     }
+
 }
