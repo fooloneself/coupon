@@ -15,7 +15,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.0.0",
-        "yiisoft/yii2": "2.0.16"
+        "yiisoft/yii2": "2.0.38"
     },
     "replace": {
 				"bower-asset/inputmask": ">=3.2.0"
